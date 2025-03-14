@@ -1,13 +1,15 @@
 import React from "react";
 
-const JobCard = ({ jobName, hours, hourlyWage, note, email }) => {
+const JobCard = ({ title, hours, wage, specialNote, email }) => {
   return (
     <>
       <div className="bg-gray-800 p-4 rounded-2xl shadow-lg text-white w-64">
-        <h3 className="mt-4 text-primary font-semibold">{jobName} Wanted</h3>
+        <h3 className="mt-4 text-primary font-semibold">{title} Wanted</h3>
         <p className="text-secondary">{hours} hours</p>
-        <p className="text-secondary">Hourly wage: ${hourlyWage}</p>
-        <p className="text-secondary text-warning">Special Note: {note}</p>
+        <p className="text-secondary">Hourly wage: ${wage}</p>
+        <p className="text-secondary text-warning">
+          Special specialNote: {specialNote}
+        </p>
         <p className="text-secondary">Email: {email}</p>
 
         <div>

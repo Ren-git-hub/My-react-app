@@ -1,65 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import JobCard from "./JobCard";
 
 const JobList = () => {
-  const jobs = [
-    {
-      jobName: "Snow cleaner",
-      hours: 40,
-      hourlyWage: 50,
-      note: "Please do salting too",
-      email: "UncleBob@test.com",
-    },
-    {
-      jobName: "Lown care / Landscaping",
-      hours: 30,
-      hourlyWage: 35,
-      note: "Do not forget leaf blowing",
-      email: "Xyz@test.com",
-    },
-    {
-      jobName: "Roof cleaner",
-      hours: 25,
-      hourlyWage: 30,
-      note: "Thank you in advance",
-      email: "Tom@test.com",
-    },
-    {
-      jobName: "Handyman",
-      hours: 15,
-      hourlyWage: 25,
-      note: "tools will be provided, experience in drywall preffered",
-      email: "John@test.com",
-    },
-    {
-      jobName: "Beby sitting",
-      hours: 25,
-      hourlyWage: 20,
-      note: "female preffred",
-      email: "Zack@test.com",
-    },
-    {
-      jobName: "Dog walking",
-      hours: 2,
-      hourlyWage: 18,
-      note: "must be friendly with pet",
-      email: "PetFriend@test.com",
-    },
-  ];
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch("http://localhost:2025/job/joblist");
+        if (!response.ok) {
+          throw new Error("Failed to fetch job listings");
+        }
+        const data = await response.json();
+        setJobs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  if (loading) return <p>Loading job listings...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <>
-      <div className="container my-3">
-        <h2>Job Posts</h2>
-        <div className="row">
-          {jobs.map((job, index) => (
-            <div className="col-md-4 my-4">
-              <JobCard key={index} {...job} />
-            </div>
-          ))}
-        </div>
+    <div className="container my-3">
+      <h2>Job Posts</h2>
+      <div className="row">
+        {jobs.map((job, index) => (
+          <div key={index} className="col-md-4 my-4">
+            <JobCard {...job} />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 
