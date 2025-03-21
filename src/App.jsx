@@ -1,39 +1,27 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from "./assets/components/Navbar";
 import SearchBar from "./assets/components/SearchBar";
 import JobList from "./assets/components/JobList";
-import JobCard from "./assets/components/JobCard";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import JobPostCreateForm from "./assets/components/JobPostCreateForm";
 import AboutUS from "./assets/components/AboutUS";
 import UserProfile from "./assets/components/UserProfile";
+import JobPostEditForm from "./assets/components/JobPostEditForm";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <Router>
-        <Navbar title="Ren app" />
+    <Router>
+      <Navbar title="Husband 4 Hire" />
+      <div className="container">
         <SearchBar />
-        <div className="Content">
-          <Switch>
-            <Route exact path="/">
-              <JobList />
-            </Route>
-            <Route exact path="/create">
-              <JobPostCreateForm />
-            </Route>
-            <Route exact path="/about">
-              <AboutUS />
-            </Route>
-            <Route exact path="/profile">
-              <UserProfile />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </>
+        <Switch>
+          <Route exact path="/" component={JobList} />
+          <Route exact path="/create" component={JobPostCreateForm} />
+          <Route exact path="/about" component={AboutUS} />
+          <Route exact path="/profile" component={UserProfile} />
+          <Route exact path="/edit/:id" component={JobPostEditForm} />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

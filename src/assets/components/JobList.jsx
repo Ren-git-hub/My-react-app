@@ -25,15 +25,15 @@ const JobList = () => {
     fetchJobs();
   }, []);
 
-  if (loading) return <p>Loading job listings...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p className="text-center my-3">Loading job listings...</p>;
+  if (error) return <p className="text-center text-danger">{error}</p>;
 
   return (
-    <div className="container my-3">
-      <h2>Job Posts</h2>
-      <div className="row">
-        {jobs.map((job, index) => (
-          <div key={index} className="col-md-4 my-4">
+    <div className="container mt-4">
+      <h2 className="fw-bold text-center text-primary">Available Jobs</h2>
+      <div className="row g-4">
+        {jobs.map((job) => (
+          <div key={job.id} className="col-lg-4 col-md-6">
             <JobCard {...job} />
           </div>
         ))}

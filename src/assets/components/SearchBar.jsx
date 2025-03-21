@@ -1,38 +1,52 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 function SearchBar() {
   return (
-    <div className="container-fluid">
-      <form className="d-flex" role="search">
-        <input
-          className="form-control me-2"
-          type="search"
-          placeholder="Search Keyword"
-          aria-label="Search"
-        />
-        <input
-          className="form-control me-2"
-          type="text"
-          placeholder="City"
-          aria-label="City"
-        />
-        <input
-          className="form-control me-2"
-          type="text"
-          placeholder="Province"
-          aria-label="Province"
-        />
-        <button className="btn btn-outline-success" type="submit">
-          Search
-        </button>
-      </form>
+    <div className="container mt-4">
+      <div
+        className="p-4 rounded-4 shadow-sm"
+        style={{
+          background: "linear-gradient(135deg, #fdfbfb, #ebedee)",
+        }}
+      >
+        <form className="row g-3">
+          <div className="col-md-4">
+            <input
+              type="search"
+              className="form-control rounded-pill p-2"
+              placeholder="🔍 Search Keyword"
+            />
+          </div>
+          <div className="col-md-3">
+            <input
+              type="text"
+              className="form-control rounded-pill p-2"
+              placeholder="📍 City"
+            />
+          </div>
+          <div className="col-md-3">
+            <input
+              type="text"
+              className="form-control rounded-pill p-2"
+              placeholder="🏢 Province"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn w-100 text-white rounded-pill"
+              style={{
+                background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+                padding: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
-
-SearchBar.propTypes = {
-  // Define props here
-};
 
 export default SearchBar;
