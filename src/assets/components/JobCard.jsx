@@ -1,28 +1,65 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const JobCard = ({ title, hours, wage, specialNote, email }) => {
+const JobCard = ({ title, description, location, salary, post_date, employer }) => {
   return (
-    <>
-      <div className="bg-gray-800 p-4 rounded-2xl shadow-lg text-white w-64">
-        <h3 className="mt-4 text-primary font-semibold">{title} Wanted</h3>
-        <p className="text-secondary">{hours} hours</p>
-        <p className="text-secondary">Hourly wage: ${wage}</p>
-        <p className="text-secondary text-warning">
-          Special specialNote: {specialNote}
-        </p>
-        <p className="text-secondary">Email: {email}</p>
-
-        <div>
-          <button type="button" className="btn btn-primary mx-2">
-            Accept
-          </button>
-          <button type="button" className="btn btn-secondary mx-2">
-            Read more
-          </button>
+      <div
+          className="card border-0 shadow-sm p-4 rounded-4"
+          style={{
+            background: "#fff",
+            transition: "transform 0.3s ease-in-out",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
+        <div className="card-body">
+          <h5 className="fw-bold text-primary">{title}</h5>
+          <p className="text-muted">{description}</p>
+          <p className="text-secondary">Location: {location}</p>
+          <p className="text-success fw-bold">Salary: ${salary}</p>
+          <p className="text-muted small">
+            Posted on: {new Date(post_date).toLocaleDateString()}
+          </p>
+          {employer && (
+              <p className="text-muted small">
+                Employer: {employer.fullName || employer.username}
+              </p>
+          )}
+          <div className="d-flex gap-3 mt-3">
+            <button
+                className="btn"
+                style={{
+                  background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+                  color: "white",
+                  borderRadius: "25px",
+                  padding: "8px 20px",
+                  fontWeight: "bold",
+                }}
+            >
+              Accept
+            </button>
+            <button
+                className="btn btn-outline-secondary"
+                style={{
+                  borderRadius: "25px",
+                  padding: "8px 20px",
+                }}
+            >
+              Read More
+            </button>
+          </div>
         </div>
       </div>
-    </>
   );
+};
+
+JobCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  salary: PropTypes.number.isRequired,
+  post_date: PropTypes.string.isRequired,
+  employer: PropTypes.object,
 };
 
 export default JobCard;

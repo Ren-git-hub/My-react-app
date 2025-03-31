@@ -9,7 +9,8 @@ const JobList = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch("http://localhost:2025/job/joblist");
+        // Use the updated endpoint from the backend
+        const response = await fetch("http://localhost:8000/jobpost/alljobpost");
         if (!response.ok) {
           throw new Error("Failed to fetch job listings");
         }
@@ -25,20 +26,22 @@ const JobList = () => {
     fetchJobs();
   }, []);
 
-  if (loading) return <p>Loading job listings...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading)
+    return <p className="text-center my-3">Loading job listings...</p>;
+  if (error)
+    return <p className="text-center text-danger">{error}</p>;
 
   return (
-    <div className="container my-3">
-      <h2>Job Posts</h2>
-      <div className="row">
-        {jobs.map((job, index) => (
-          <div key={index} className="col-md-4 my-4">
-            <JobCard {...job} />
-          </div>
-        ))}
+      <div className="container mt-4">
+        <h2 className="fw-bold text-center text-primary">Available Jobs</h2>
+        <div className="row g-4">
+          {jobs.map((job) => (
+              <div key={job.jobPostID} className="col-lg-4 col-md-6">
+                <JobCard {...job} />
+              </div>
+          ))}
+        </div>
       </div>
-    </div>
   );
 };
 
