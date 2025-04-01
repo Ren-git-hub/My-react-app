@@ -9,7 +9,6 @@ const JobList = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        // Use the updated endpoint from the backend
         const response = await fetch("http://localhost:8000/jobpost/alljobpost");
         if (!response.ok) {
           throw new Error("Failed to fetch job listings");

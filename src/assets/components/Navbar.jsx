@@ -35,24 +35,42 @@ function Navbar({ title }) {
     }, []);
 
     return (
-        <nav className="bg-navbg !no-underline text-white shadow-md">
-            <div className="container mx-auto flex items-center justify-between px-4 py-2">
+        <nav
+            className="shadow-sm"
+            style={{ background: "linear-gradient(135deg, #ff9a9e, #fad0c4)" }}
+        >
+            <div className="container mx-auto flex items-center justify-between px-4 py-3">
                 {/* Logo & Main Links */}
-                <div className="flex items-center space-x-4">
-                    <Link to="/" className="font-bold text-lg !no-underline text-white">
+                <div className="flex items-center space-x-6">
+                    <Link
+                        to="/"
+                        className="font-bold text-lg text-[#2575fc] !no-underline"
+                    >
                         {title}
                     </Link>
                     <div className="hidden md:flex space-x-4">
-                        <Link to="/" className="!no-underline text-white flex items-center">
+                        <Link
+                            to="/"
+                            className="text-[#2575fc] flex items-center !no-underline hover:text-blue-700"
+                        >
                             <i className="bi bi-house mr-1"></i> Home
                         </Link>
-                        <Link to="/about" className="!no-underline text-white flex items-center">
+                        <Link
+                            to="/about"
+                            className="text-[#2575fc] flex items-center !no-underline hover:text-blue-700"
+                        >
                             <i className="bi bi-info-circle mr-1"></i> About Us
                         </Link>
-                        <Link to="/contact" className="!no-underline text-white flex items-center">
+                        <Link
+                            to="/contact"
+                            className="text-[#2575fc] flex items-center !no-underline hover:text-blue-700"
+                        >
                             <i className="bi bi-envelope mr-1"></i> Contact Us
                         </Link>
-                        <Link to="/create" className="!no-underline text-white flex items-center">
+                        <Link
+                            to="/create"
+                            className="text-[#2575fc] flex items-center !no-underline hover:text-blue-700"
+                        >
                             <i className="bi bi-briefcase mr-1"></i> Post a Job
                         </Link>
                     </div>
@@ -61,7 +79,7 @@ function Navbar({ title }) {
                 {/* Register/Login OR Profile Button */}
                 <div className="flex items-center space-x-4">
                     <button
-                        className="md:hidden !no-underline text-white text-xl"
+                        className="md:hidden text-[#2575fc] text-2xl"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
                         ☰
@@ -70,15 +88,9 @@ function Navbar({ title }) {
                         {username ? (
                             <Link
                                 to="/profile"
-                                className="btn"
+                                className="text-white rounded-full px-5 py-2 font-bold shadow-sm !no-underline"
                                 style={{
                                     background: "linear-gradient(135deg, #6a11cb, #2575fc)",
-                                    color: "white",
-                                    borderRadius: "25px",
-                                    padding: "8px 20px",
-                                    fontWeight: "bold",
-                                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                                    textDecoration: "none",
                                 }}
                             >
                                 {username}
@@ -87,13 +99,13 @@ function Navbar({ title }) {
                             <>
                                 <Link
                                     to="/register"
-                                    className="bg-white !text-navbg !no-underline px-3 py-1 rounded hover:bg-gray-100"
+                                    className="bg-white text-[#2575fc] px-4 py-2 rounded-full shadow-sm font-semibold !no-underline hover:bg-gray-100"
                                 >
                                     Register
                                 </Link>
                                 <Link
                                     to="/login"
-                                    className="border border-white px-3 py-1 rounded !no-underline text-white hover:bg-white hover:text-blue-600"
+                                    className="block bg-white text-[#2575fc] rounded-full px-4 py-2 shadow-sm font-semibold !no-underline hover:bg-gray-100"
                                 >
                                     Login
                                 </Link>
@@ -105,41 +117,41 @@ function Navbar({ title }) {
 
             {/* Mobile Menu */}
             {isMenuOpen && (
-                <div className="md:hidden bg-darknavbg py-2 text-center space-y-2">
+                <div className="md:hidden bg-[#ebedee] py-3 text-center space-y-3 shadow-inner">
                     <Link
                         to="/"
                         onClick={() => setIsMenuOpen(false)}
-                        className="block py-1 !no-underline text-white flex items-center justify-center"
+                        className="block text-[#2575fc] py-2 flex items-center justify-center !no-underline"
                     >
                         <i className="bi bi-house mr-1"></i> Home
                     </Link>
                     <Link
                         to="/about"
                         onClick={() => setIsMenuOpen(false)}
-                        className="block py-1 !no-underline text-white flex items-center justify-center"
+                        className="block text-[#2575fc] py-2 flex items-center justify-center !no-underline"
                     >
                         <i className="bi bi-info-circle mr-1"></i> About Us
                     </Link>
                     <Link
                         to="/contact"
                         onClick={() => setIsMenuOpen(false)}
-                        className="block py-1 !no-underline text-white flex items-center justify-center"
+                        className="block text-[#2575fc] py-2 flex items-center justify-center !no-underline"
                     >
                         <i className="bi bi-envelope mr-1"></i> Contact Us
                     </Link>
                     <Link
                         to="/create"
                         onClick={() => setIsMenuOpen(false)}
-                        className="block py-1 !no-underline text-white flex items-center justify-center"
+                        className="block text-[#2575fc] py-2 flex items-center justify-center !no-underline"
                     >
                         <i className="bi bi-briefcase mr-1"></i> Post a Job
                     </Link>
-                    <div className="mt-2 space-y-2">
+                    <div className="mt-3 space-y-2 px-6">
                         {username ? (
                             <Link
                                 to="/profile"
                                 onClick={() => setIsMenuOpen(false)}
-                                className="block mx-4 py-1 bg-white !text-navbg !no-underline rounded hover:bg-gray-100"
+                                className="block bg-white text-[#2575fc] rounded-full px-4 py-2 shadow-sm font-semibold !no-underline hover:bg-gray-100"
                             >
                                 {username}
                             </Link>
@@ -148,14 +160,14 @@ function Navbar({ title }) {
                                 <Link
                                     to="/register"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block mx-4 py-1 bg-white !text-navbg !no-underline rounded hover:bg-gray-100"
+                                    className="block bg-white text-[#2575fc] rounded-full px-4 py-2 shadow-sm font-semibold !no-underline hover:bg-gray-100"
                                 >
                                     Register
                                 </Link>
                                 <Link
                                     to="/login"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block mx-4 py-1 border border-white rounded !no-underline text-white hover:bg-white hover:text-blue-600"
+                                    className="block bg-white text-[#2575fc] rounded-full px-4 py-2 shadow-sm font-semibold !no-underline hover:bg-gray-100"
                                 >
                                     Login
                                 </Link>
@@ -165,6 +177,7 @@ function Navbar({ title }) {
                 </div>
             )}
         </nav>
+
     );
 }
 

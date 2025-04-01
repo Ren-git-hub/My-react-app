@@ -12,6 +12,8 @@ function RegisterPage() {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -68,32 +70,32 @@ function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#fdfbfb] to-[#ebedee] px-4 py-12">
+            <div className="w-full max-w-lg bg-white p-8 rounded-3xl shadow-md">
+                <h2 className="text-3xl font-bold text-center mb-6 text-[#2575fc]">Register</h2>
 
                 {/* Success / Error Messages */}
                 {successMessage && (
-                    <div className="mb-4 p-2 bg-green-100 text-green-800 rounded">
+                    <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-lg text-center">
                         {successMessage}
                     </div>
                 )}
                 {errorMessage && (
-                    <div className="mb-4 p-2 bg-red-100 text-red-800 rounded">
+                    <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-lg text-center">
                         {errorMessage}
                     </div>
                 )}
 
                 {/* User Type Switch */}
-                <div className="mb-4 mt-4">
-                    <div className="flex w-full border rounded overflow-hidden">
+                <div className="mb-6">
+                    <div className="flex border border-[#2575fc] rounded-full overflow-hidden text-sm font-medium">
                         <button
                             type="button"
                             onClick={() => setUserType("jobSeeker")}
-                            className={`w-1/2 py-2 text-center transition-colors duration-200 ${
+                            className={`w-1/2 py-2 transition-colors duration-200 ${
                                 userType === "jobSeeker"
-                                    ? "bg-navbg text-white"
-                                    : "bg-white text-navbg"
+                                    ? "bg-gradient-to-r from-[#6a11cb] to-[#2575fc] text-white"
+                                    : "bg-white text-[#2575fc]"
                             }`}
                         >
                             Job Seeker
@@ -101,10 +103,10 @@ function RegisterPage() {
                         <button
                             type="button"
                             onClick={() => setUserType("employer")}
-                            className={`w-1/2 py-2 text-center transition-colors duration-200 ${
+                            className={`w-1/2 py-2 transition-colors duration-200 ${
                                 userType === "employer"
-                                    ? "bg-navbg text-white"
-                                    : "bg-white text-navbg"
+                                    ? "bg-gradient-to-r from-[#6a11cb] to-[#2575fc] text-white"
+                                    : "bg-white text-[#2575fc]"
                             }`}
                         >
                             Employer
@@ -113,97 +115,126 @@ function RegisterPage() {
                 </div>
 
                 {/* Registration Form */}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Full Name</label>
-                        <input
-                            type="text"
-                            placeholder="Full Name"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            className="mt-1 w-full border border-gray-300 rounded px-3 py-2
-                         focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            required
-                        />
+                <form onSubmit={handleSubmit} className="space-y-5" role="form">
+                    {/* Full Name */}
+                    <div className="relative">
+                        <label htmlFor="fullName" className="sr-only">Full Name</label>
+                        <div className="flex items-center border border-gray-300 rounded-full px-4 py-3 focus-within:ring-2 focus-within:ring-[#2575fc] bg-white">
+                            <span className="mr-2">🙋</span>
+                            <input
+                                id="fullName"
+                                type="text"
+                                name="fullName"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="Full Name"
+                                required
+                                className="w-full bg-transparent outline-none placeholder-gray-500"
+                                aria-label="Full Name"
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Username</label>
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="mt-1 w-full border border-gray-300 rounded px-3 py-2
-                         focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            required
-                        />
+                    {/* Username */}
+                    <div className="relative">
+                        <label htmlFor="username" className="sr-only">Username</label>
+                        <div className="flex items-center border border-gray-300 rounded-full px-4 py-3 focus-within:ring-2 focus-within:ring-[#2575fc] bg-white">
+                            <span className="mr-2">👤</span>
+                            <input
+                                id="username"
+                                type="text"
+                                name="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="Username"
+                                required
+                                className="w-full bg-transparent outline-none placeholder-gray-500"
+                                aria-label="Username"
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 w-full border border-gray-300 rounded px-3 py-2
-                         focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            required
-                        />
+                    {/* Email */}
+                    <div className="relative">
+                        <label htmlFor="email" className="sr-only">Email</label>
+                        <div className="flex items-center border border-gray-300 rounded-full px-4 py-3 focus-within:ring-2 focus-within:ring-[#2575fc] bg-white">
+                            <span className="mr-2">📧</span>
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Email"
+                                required
+                                className="w-full bg-transparent outline-none placeholder-gray-500"
+                                aria-label="Email"
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Password</label>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 w-full border border-gray-300 rounded px-3 py-2
-                         focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            required
-                        />
+                    {/* Password with Show/Hide Toggle */}
+                    <div className="relative">
+                        <label htmlFor="password" className="sr-only">Password</label>
+                        <div className="flex items-center border border-gray-300 rounded-full px-4 py-3 focus-within:ring-2 focus-within:ring-[#2575fc] bg-white">
+                            <span className="mr-2">🔐</span>
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Password"
+                                required
+                                className="w-full bg-transparent outline-none placeholder-gray-500"
+                                aria-label="Password"
+                            />
+                            <button
+                                type="button"
+                                className="ml-2 text-sm text-[#2575fc] font-medium"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Phone</label>
-                        <input
-                            type="tel"
-                            placeholder="Phone"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="mt-1 w-full border border-gray-300 rounded px-3 py-2
-                         focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            required
-                        />
+                    {/* Phone */}
+                    <div className="relative">
+                        <label htmlFor="phone" className="sr-only">Phone</label>
+                        <div className="flex items-center border border-gray-300 rounded-full px-4 py-3 focus-within:ring-2 focus-within:ring-[#2575fc] bg-white">
+                            <span className="mr-2">📱</span>
+                            <input
+                                id="phone"
+                                type="tel"
+                                name="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="Phone"
+                                required
+                                className="w-full bg-transparent outline-none placeholder-gray-500"
+                                aria-label="Phone"
+                            />
+                        </div>
                     </div>
-
-                    {/* Additional fields for job seekers or employers, if needed */}
-                    {userType === "jobSeeker" && (
-                        <>
-                            {/* Add extra jobSeeker fields here if your backend requires them */}
-                        </>
-                    )}
-                    {userType === "employer" && (
-                        <>
-                            {/* Add extra employer fields here if your backend requires them */}
-                        </>
-                    )}
 
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full bg-navbg text-white py-2 rounded
-                       hover:bg-teal-600 transition-colors duration-200
-                       flex items-center justify-center"
                         disabled={loading}
+                        className="w-full text-white rounded-full font-bold text-lg shadow-md transition-all duration-300"
+                        style={{
+                            background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+                            padding: "12px",
+                        }}
                     >
                         {loading ? "Registering..." : "Register"}
                     </button>
                 </form>
+
             </div>
         </div>
+
     );
 }
 

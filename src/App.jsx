@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./assets/components/Navbar";
 import SearchBar from "./assets/components/SearchBar";
 import JobList from "./assets/components/JobList";
-import JobCard from "./assets/components/JobCard";
+import ContactUs from "./assets/components/ContactUs";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import JobPostCreateForm from "./assets/components/JobPostCreateForm";
 import AboutUS from "./assets/components/AboutUS";
@@ -26,6 +26,7 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+              <Route path="/contact" element={<ContactUs />} />
           </Routes>
         </div>
       </Router>
