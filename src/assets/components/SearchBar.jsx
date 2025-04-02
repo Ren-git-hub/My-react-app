@@ -10,27 +10,14 @@ function SearchBar() {
         }}
       >
         <form className="row g-3">
-          <div className="col-md-4">
+          <div className="col">
             <input
               type="search"
               className="form-control rounded-pill p-2"
               placeholder="🔍 Search Keyword"
             />
           </div>
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control rounded-pill p-2"
-              placeholder="📍 City"
-            />
-          </div>
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control rounded-pill p-2"
-              placeholder="🏢 Province"
-            />
-          </div>
+          
           <div className="col-md-2">
             <button
               className="btn w-100 text-white rounded-pill"
