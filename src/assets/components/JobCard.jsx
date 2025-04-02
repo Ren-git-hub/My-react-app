@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const JobCard = ({ title, description, location, salary, postDate, employer }) => {
+const JobCard = ({ title, description, location, salary, postDate, hours, employer }) => {
     return (
         <div
             className="card border-0 shadow-sm p-4 rounded-4"
@@ -16,10 +16,11 @@ const JobCard = ({ title, description, location, salary, postDate, employer }) =
                 <h5 className="fw-bold text-primary">{title}</h5>
                 <p className="text-muted">{description}</p>
                 <p className="text-secondary">Location: {location}</p>
-                <p className="text-success fw-bold">Salary: ${salary}</p>
+                <p className="text-success fw-bold">Hourly Wage: ${salary}</p>
                 <p className="text-muted small">
                     Posted on: {new Date(postDate).toLocaleDateString()}
                 </p>
+                <p className="text-muted small">Hours: {hours}</p>
                 {employer && (
                     <p className="text-muted small">
                         Employer: {employer.fullName || employer.username}
@@ -58,7 +59,8 @@ JobCard.propTypes = {
     description: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     salary: PropTypes.number.isRequired,
-    postDate: PropTypes.string.isRequired, // updated prop name
+    postDate: PropTypes.string.isRequired,
+    hours: PropTypes.number.isRequired,
     employer: PropTypes.object,
 };
 
