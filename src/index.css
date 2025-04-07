@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+    --color-navbg: #134a5e;
+    --color-darknavbg: #124155;
+}
