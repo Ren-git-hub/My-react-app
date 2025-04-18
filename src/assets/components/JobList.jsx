@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import JobCard from "./JobCard";
+import { apiFetch } from "../../api";
 
 // Mapping from full province names (lowercase) to their abbreviations (lowercase)
 const provinceMap = {
@@ -11,23 +12,29 @@ const provinceMap = {
   "nova scotia": "ns",
 };
 
+// eslint-disable-next-line react/prop-types
 const JobList = ({ searchKeyword }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Always fetch all job posts from the backend
+  // Fetch all job posts from the backend with auth
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:8000/jobpost/alljobpost");
+        console.log("Fetching job listings...");
+        const response = await apiFetch("http://localhost:8000/jobpost/alljobpost");
+        console.log("Job listings response status:", response.status);
         if (!response.ok) {
-          throw new Error("Failed to fetch job listings");
+          const text = await response.text();
+          throw new Error(`Failed to fetch job listings: ${response.status} ${text}`);
         }
         const data = await response.json();
+        console.log("Job listings data:", data);
         setJobs(data);
       } catch (err) {
+        console.error("Error fetching job listings:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -39,7 +46,7 @@ const JobList = ({ searchKeyword }) => {
 
   // Filter jobs locally based on search parameters
   let filteredJobs = jobs;
-  if (searchKeyword) {
+  if (searchKeyword && typeof searchKeyword === 'object') {
     const { keyword, location } = searchKeyword;
 
     // Filter by keyword (if provided)
@@ -47,33 +54,27 @@ const JobList = ({ searchKeyword }) => {
       filteredJobs = filteredJobs.filter(
           (job) =>
               job.title.toLowerCase().includes(keyword.toLowerCase()) ||
-              job.description.toLowerCase().includes(keyword.toLowerCase())
+              (job.description && job.description.toLowerCase().includes(keyword.toLowerCase()))
       );
     }
 
     // Filter by location (if provided)
     if (location && location.trim() !== "") {
-      // Split the search location string (e.g., "Ontario, Toronto")
       let searchParts = location.toLowerCase().split(",").map((s) => s.trim());
 
-      // Map the province part to its abbreviation if applicable
       if (searchParts[0] !== "any" && provinceMap[searchParts[0]]) {
         searchParts[0] = provinceMap[searchParts[0]];
       }
 
       filteredJobs = filteredJobs.filter((job) => {
-        // Assume job.location is stored as "City, ProvinceAbbr"
         const jobParts = job.location.toLowerCase().split(",").map((s) => s.trim());
-        // Check that every part of the search is included in the job's location (order independent)
         return searchParts.every((part) => jobParts.includes(part));
       });
     }
   }
 
-  if (loading)
-    return <p className="text-center my-3">Loading job listings...</p>;
-  if (error)
-    return <p className="text-center text-danger">{error}</p>;
+  if (loading) return <p className="text-center my-3">Loading job listings...</p>;
+  if (error) return <p className="text-center text-danger">{error}</p>;
 
   return (
       <div className="container mt-4">

@@ -7,7 +7,7 @@ function JobPostEditForm() {
   const history = useHistory();
 
   useEffect(() => {
-    fetch(`http://localhost:2025/jobs/${id}`)
+    fetch(`http://localhost:8000/jobs/${id}`)
       .then(res => res.json())
       .then(data => setFormData(data));
   }, [id]);
@@ -18,7 +18,7 @@ function JobPostEditForm() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    await fetch(`http://localhost:2025/jobs/${id}`, {
+    await fetch(`http://localhost:8000/jobs/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
