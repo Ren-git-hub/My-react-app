@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import { AuthProvider } from "./auth/AuthContext";
 import PrivateRoute from "./assets/components/PrivateRoute";
+
 import Navbar from "./assets/components/Navbar";
 import SearchBar from "./assets/components/SearchBar";
 import JobList from "./assets/components/JobList";
 import JobPostCreateForm from "./assets/components/JobPostCreateForm";
+import JobPostEditForm from "./assets/components/JobPostEditForm";
 import AboutUS from "./assets/components/AboutUS";
 import UserProfile from "./assets/components/UserProfile";
 import LoginPage from "./assets/components/LoginPage";
@@ -45,6 +46,14 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <JobPostCreateForm />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/edit/:id"
+                        element={
+                            <PrivateRoute>
+                                <JobPostEditForm />
                             </PrivateRoute>
                         }
                     />

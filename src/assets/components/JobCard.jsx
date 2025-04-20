@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const JobCard = ({ title, description, location, salary, postDate, hours, employer }) => {
+    const [showContact, setShowContact] = useState(false);
+
     return (
         <div
             className="card border-0 shadow-sm p-4 rounded-4"
@@ -26,6 +28,7 @@ const JobCard = ({ title, description, location, salary, postDate, hours, employ
                         Employer: {employer.fullName || employer.username}
                     </p>
                 )}
+
                 <div className="d-flex gap-3 mt-3">
                     <button
                         className="btn"
@@ -36,19 +39,18 @@ const JobCard = ({ title, description, location, salary, postDate, hours, employ
                             padding: "8px 20px",
                             fontWeight: "bold",
                         }}
+                        onClick={() => setShowContact(!showContact)}
                     >
-                        Accept
-                    </button>
-                    <button
-                        className="btn btn-outline-secondary"
-                        style={{
-                            borderRadius: "25px",
-                            padding: "8px 20px",
-                        }}
-                    >
-                        Read More
+                        Contact Employer
                     </button>
                 </div>
+
+                {showContact && employer && (
+                    <div className="mt-3 text-muted small">
+                        {employer.email && <p>Email: {employer.email}</p>}
+                        {employer.phone && <p>Phone: {employer.phone}</p>}
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -61,7 +63,12 @@ JobCard.propTypes = {
     salary: PropTypes.number.isRequired,
     postDate: PropTypes.string.isRequired,
     hours: PropTypes.number.isRequired,
-    employer: PropTypes.object,
+    employer: PropTypes.shape({
+        fullName: PropTypes.string,
+        username: PropTypes.string,
+        email: PropTypes.string,
+        phone: PropTypes.string,
+    }),
 };
 
 export default JobCard;

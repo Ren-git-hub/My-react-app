@@ -1,19 +1,26 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useAuth } from "../../auth/AuthContext";
 
-function Navbar({ title }) {
+export default function Navbar({ title }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [username] = useState(localStorage.getItem("username"));
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    // Fallback to username stored in localStorage
+    const storedUsername = localStorage.getItem('username');
+    const displayName = user?.username || storedUsername;
+
+    const handleLogout = () => {
+        logout();                     // clear auth state
+        localStorage.removeItem('username'); // clear stored username
+        navigate("/about");         // redirect to About Us
+    };
 
     return (
-        <nav
-            className="shadow-sm"
-            style={{ background: "linear-gradient(135deg, #ff9a9e, #fad0c4)" }}
-        >
+        <nav className="shadow-sm" style={{ background: "linear-gradient(135deg, #ff9a9e, #fad0c4)" }}>
             <div className="container mx-auto flex items-center justify-between px-4 py-3">
                 {/* Logo & Main Links */}
                 <div className="flex items-center space-x-6">
@@ -38,24 +45,21 @@ function Navbar({ title }) {
 
                 {/* Auth Buttons */}
                 <div className="flex items-center space-x-4">
-                    <button
-                        className="md:hidden text-[#2575fc] text-2xl"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    >
+                    <button className="md:hidden text-[#2575fc] text-2xl" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                         ☰
                     </button>
                     <div className="hidden md:flex space-x-3">
-                        {username ? (
+                        {displayName ? (
                             <>
                                 <Link
                                     to="/profile"
                                     className="text-white rounded-full px-5 py-2 font-bold shadow-sm !no-underline"
                                     style={{ background: "linear-gradient(135deg, #6a11cb, #2575fc)" }}
                                 >
-                                    {username}
+                                    {displayName}
                                 </Link>
                                 <button
-                                    onClick={logout}
+                                    onClick={handleLogout}
                                     className="bg-white text-[#2575fc] px-4 py-2 !rounded-full shadow-sm font-semibold hover:bg-gray-100"
                                 >
                                     Logout
@@ -98,17 +102,17 @@ function Navbar({ title }) {
                     </Link>
 
                     <div className="mt-3 space-y-2 px-6">
-                        {username ? (
+                        {displayName ? (
                             <>
                                 <Link
                                     to="/profile"
                                     onClick={() => setIsMenuOpen(false)}
                                     className="block bg-white text-[#2575fc] rounded-full px-4 py-2 shadow-sm font-semibold !no-underline hover:bg-gray-100"
                                 >
-                                    {username}
+                                    {displayName}
                                 </Link>
                                 <button
-                                    onClick={() => { logout(); setIsMenuOpen(false); }}
+                                    onClick={() => { handleLogout(); setIsMenuOpen(false); }}
                                     className="block w-full bg-white text-[#2575fc] !rounded-full px-4 py-2 shadow-sm font-semibold hover:bg-gray-100"
                                 >
                                     Logout
@@ -134,5 +138,3 @@ function Navbar({ title }) {
 Navbar.propTypes = {
     title: PropTypes.string.isRequired,
 };
-
-export default Navbar;
