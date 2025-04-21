@@ -37,53 +37,66 @@ function JobPostCreateForm() {
     NS: ["Halifax", "Sydney", "Truro", "New Glasgow", "Glace Bay", "Bridgewater", "Amherst", "Kentville", "Berwick", "Digby"],
   };
 
+  // Update formData state when any input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value, // overwrite only the changed field
+    }));
   };
 
+// Submit the job post form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     setLoading(true);
 
-    // ► Build payload
+    // build payload from formData
     const payload = {
       title: formData.title,
       description: formData.description,
       location: `${formData.city}, ${formData.province}`,
       salary: parseFloat(formData.salary),
       hours: parseInt(formData.hours, 10),
-      employer: { userID: user.userID }
+      employer: { userID: user.userID },
     };
 
-    // ► Debug the payload
-    console.log("☞ Submitting JobPost payload:", payload);
-
     try {
+      // send POST request to create job post
       const res = await apiFetch(
           "http://localhost:8000/jobpost/createjobpost",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
           }
       );
       if (!res.ok) {
         const text = await res.text();
         throw new Error(text || `Error ${res.status}`);
       }
+
       setSuccess("Job posted successfully! Redirecting...");
-      setFormData({ title: "", province: "", city: "", hours: "", salary: "", description: "" });
+      // reset form fields
+      setFormData({
+        title: "",
+        province: "",
+        city: "",
+        hours: "",
+        salary: "",
+        description: "",
+      });
+      // navigate home after brief delay
       setTimeout(() => navigate("/"), 1500);
-    } catch (e) {
-      console.error("Job creation failed:", e);
-      setError(e.message);
+    } catch (error) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
       <div className="container mt-5">
