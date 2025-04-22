@@ -1,97 +1,106 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../../api";
 
-const UserProfile = () => {
-  const [user, setUser] = useState(null);
-  const [userJobs, setUserJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+function UserProfile() {
+    const [profile, setProfile] = useState(null);
+    const [jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-  const userId = 1; // Static user for now
+    useEffect(() => {
+        async function loadData() {
+            setLoading(true);
+            try {
+                // 1) Fetch user profile
+                const respProfile = await apiFetch("http://localhost:8000/user/me");
+                if (!respProfile.ok) throw new Error(`Could not load profile (${respProfile.status})`);
+                const userData = await respProfile.json();
+                setProfile(userData);
 
-  // const handleDelete = async (jobPostID) => {
-  //   if (window.confirm("Are you sure you want to delete this job?")) {
-  //     await fetch(`http://localhost:8000/jobpost/deletejobpost/${jobPostID}`, {
-  //       method: "DELETE"
-  //     });
-  //     setUserJobs(userJobs.filter(job => job.jobPostID !== jobPostID));
-  //   }
-  // };
-  //
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const [userRes, jobsRes] = await Promise.all([
-  //         fetch(`http://localhost:8000/user/${userId}`),
-  //         fetch(`http://localhost:8000/jobpost/alljobpost?userId=${userId}`)
-  //       ]);
-  //
-  //       const userData = await userRes.json();
-  //       const jobsData = await jobsRes.json();
-  //
-  //       setUser(userData);
-  //       setUserJobs(jobsData);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //
-  //   fetchUserData();
-  // }, []);
+                // 2) Fetch all jobs, filter to those posted by this user
+                const respJobs = await apiFetch("http://localhost:8000/jobpost/alljobpost");
+                if (!respJobs.ok) throw new Error(`Could not load jobs (${respJobs.status})`);
+                const allJobs = await respJobs.json();
+                const myJobs = allJobs.filter(j => j.employer?.userID === userData.userID);
+                setJobs(myJobs);
+            } catch (e) {
+                console.error("UserProfile error:", e);
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadData();
+    }, []);
 
-  if (loading) return <div className="text-center my-5">Loading...</div>;
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this job?")) return;
+        try {
+            const res = await apiFetch(
+                `http://localhost:8000/jobpost/deletejobpost/${id}`,
+                { method: "DELETE" }
+            );
+            if (!res.ok) throw new Error(`Delete failed: ${res.status}`);
+            setJobs(jobs.filter(job => job.jobPostID !== id));
+        } catch (e) {
+            console.error("Error deleting job:", e);
+            alert(e.message);
+        }
+    };
 
-  return (
-      <div className="container my-5">
-        {/* Profile Section */}
-        <div className="row mb-4">
-          <div className="col-lg-8 offset-lg-2 text-center">
-            <h2 className="fw-bold text-primary">👤 User Profile</h2>
-          </div>
-        </div>
+    const handleEdit = (id) => {
+        navigate(`/edit/${id}`);
+    };
 
-        <div className="row mb-5">
-          <div className="col-lg-6 offset-lg-3">
-            <div className="card shadow-sm border-0 p-4 rounded-4">
-              <h4 className="fw-bold mb-3">{user.name || user.username}</h4>
-              <p className="mb-1 text-muted">📧 {user.email}</p>
-              <p className="mb-1 text-muted">
-                📍 {user.city}, {user.province}
-              </p>
-              <p className="mt-3">{user.bio}</p>
+    if (loading) return <p className="text-center my-5">Loading profile...</p>;
+    if (error) return <p className="text-center text-danger">{error}</p>;
+
+    return (
+        <div className="container my-5">
+            {/* Profile Info */}
+            <div className="card p-4 mb-5 shadow-sm rounded-4">
+                <h2 className="fw-bold text-primary mb-3">
+                    👤 {profile.fullName || profile.username}
+                </h2>
+                <p className="mb-1"><strong>Username:</strong> {profile.username}</p>
+                <p className="mb-1"><strong>Email:</strong> {profile.email}</p>
+                {profile.phone && <p className="mb-1"><strong>Phone:</strong> {profile.phone}</p>}
             </div>
-          </div>
-        </div>
 
-        {/* Job Posts Section */}
-        <div className="row mb-4">
-          <div className="col-lg-8 offset-lg-2">
-            <h3 className="text-primary fw-bold mb-3">🛠 Jobs You've Posted</h3>
-          </div>
-          {userJobs.map((job) => (
-              <div key={job.jobPostID} className="col-lg-8 offset-lg-2 mb-3">
-                <div className="card shadow-sm border-0 p-3 rounded-4">
-                  <h5 className="fw-bold text-dark">{job.title}</h5>
-                  <p className="text-muted mb-1">📍 {job.location}</p>
-                  <p className="text-muted mb-1">
-                    Salary: ${job.salary}
-                  </p>
-                  <p className="text-muted mb-1">
-                    Posted on: {new Date(job.post_date).toLocaleDateString()}
-                  </p>
-                  <p className="text-muted mb-0">Details: {job.description}</p>
-                  <button
-                      className="btn btn-outline-danger btn-sm mt-2"
-                      onClick={() => handleDelete(job.jobPostID)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-          ))}
+            {/* User's Jobs */}
+            <h3 className="fw-bold text-secondary mb-3">🛠 Jobs You’ve Posted</h3>
+            {jobs.length === 0 ? (
+                <p>No jobs posted yet.</p>
+            ) : (
+                jobs.map(job => (
+                    <div key={job.jobPostID} className="card p-3 mb-3 shadow-sm rounded-4">
+                        <h4 className="fw-bold">{job.title}</h4>
+                        <p className="text-muted mb-1">Location: {job.location}</p>
+                        <p className="text-muted mb-1">Wage: ${job.salary}</p>
+                        <p className="text-muted mb-1">
+                            Posted: {new Date(job.postDate).toLocaleDateString()}
+                        </p>
+                        <div className="mt-2">
+                            <button
+                                className="btn btn-sm btn-outline-primary me-2"
+                                onClick={() => handleEdit(job.jobPostID)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => handleDelete(job.jobPostID)}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                ))
+            )}
         </div>
-      </div>
-  );
-};
+    );
+}
 
 export default UserProfile;
